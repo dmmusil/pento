@@ -85,6 +85,18 @@ defmodule Pento.AccountsTest do
       assert "has already been taken" in errors_on(changeset).email
     end
 
+    test "validates username uniqueness" do
+      %{username: username} = user_fixture()
+      valid_attrs = valid_user_attributes(%{username: username})
+      {:error, changeset} = Accounts.register_user(valid_attrs)
+      assert "has already been taken" in errors_on(changeset).username
+
+      # Now try with the upper cased email too, to check that email case is ignored.
+      valid_attrs = Map.put(valid_attrs, :username, String.upcase(username))
+      {:error, changeset} = Accounts.register_user(valid_attrs)
+      assert "has already been taken" in errors_on(changeset).username
+    end
+
     test "registers users with a hashed password" do
       email = unique_user_email()
       {:ok, user} = Accounts.register_user(valid_user_attributes(email: email))
