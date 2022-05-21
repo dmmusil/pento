@@ -25,8 +25,6 @@ defmodule Pento.HelpTest do
 
       assert {:ok, %FAQ{} = faq} = Help.create_faq(valid_attrs)
       assert faq.answer == "some answer"
-      assert faq.question == "some question"
-      assert faq.vote_count == 42
     end
 
     test "create_faq/1 with invalid data returns error changeset" do
@@ -35,12 +33,15 @@ defmodule Pento.HelpTest do
 
     test "update_faq/2 with valid data updates the faq" do
       faq = faq_fixture()
-      update_attrs = %{answer: "some updated answer", question: "some updated question", vote_count: 43}
+
+      update_attrs = %{
+        answer: "some updated answer",
+        question: "some updated question",
+        vote_count: 43
+      }
 
       assert {:ok, %FAQ{} = faq} = Help.update_faq(faq, update_attrs)
       assert faq.answer == "some updated answer"
-      assert faq.question == "some updated question"
-      assert faq.vote_count == 43
     end
 
     test "update_faq/2 with invalid data returns error changeset" do

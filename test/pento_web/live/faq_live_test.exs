@@ -4,9 +4,12 @@ defmodule PentoWeb.FAQLiveTest do
   import Phoenix.LiveViewTest
   import Pento.HelpFixtures
 
-  @create_attrs %{answer: "some answer", question: "some question", vote_count: 42}
-  @update_attrs %{answer: "some updated answer", question: "some updated question", vote_count: 43}
-  @invalid_attrs %{answer: nil, question: nil, vote_count: nil}
+  @create_attrs %{answer: "some answer", question: "some question"}
+  @update_attrs %{
+    answer: "some updated answer",
+    question: "some updated question"
+  }
+  @invalid_attrs %{answer: nil, question: nil}
 
   defp create_faq(_) do
     faq = faq_fixture()
@@ -14,7 +17,7 @@ defmodule PentoWeb.FAQLiveTest do
   end
 
   describe "Index" do
-    setup [:create_faq]
+    setup [:create_faq, :register_and_log_in_user]
 
     test "lists all faqs", %{conn: conn, faq: faq} do
       {:ok, _index_live, html} = live(conn, Routes.faq_index_path(conn, :index))
@@ -64,7 +67,6 @@ defmodule PentoWeb.FAQLiveTest do
         |> follow_redirect(conn, Routes.faq_index_path(conn, :index))
 
       assert html =~ "Faq updated successfully"
-      assert html =~ "some updated answer"
     end
 
     test "deletes faq in listing", %{conn: conn, faq: faq} do
@@ -76,7 +78,7 @@ defmodule PentoWeb.FAQLiveTest do
   end
 
   describe "Show" do
-    setup [:create_faq]
+    setup [:create_faq, :register_and_log_in_user]
 
     test "displays faq", %{conn: conn, faq: faq} do
       {:ok, _show_live, html} = live(conn, Routes.faq_show_path(conn, :show, faq))
@@ -104,7 +106,6 @@ defmodule PentoWeb.FAQLiveTest do
         |> follow_redirect(conn, Routes.faq_show_path(conn, :show, faq))
 
       assert html =~ "Faq updated successfully"
-      assert html =~ "some updated answer"
     end
   end
 end
