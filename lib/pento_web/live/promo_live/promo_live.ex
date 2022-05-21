@@ -6,27 +6,21 @@ defmodule PentoWeb.PromoLive do
   def mount(_params, _session, socket) do
     {:ok,
      socket
-     |> assign_recipient()
      |> assign_changeset()}
   end
 
-  defp assign_recipient(socket) do
+  defp assign_changeset(socket) do
     socket
-    |> assign(:recipient, %Recipient{})
-  end
-
-  defp assign_changeset(%{assigns: %{recipient: recipient}} = socket) do
-    socket
-    |> assign(:changeset, Promo.change_recipient(recipient))
+    |> assign(:changeset, Promo.change_recipient(%Recipient{}))
   end
 
   def handle_event(
         "validate",
         %{"recipient" => recipient_params},
-        %{assigns: %{recipient: recipient}} = socket
+        socket
       ) do
     changeset =
-      recipient
+      %Recipient{}
       |> Promo.change_recipient(recipient_params)
       |> Map.put(:action, :validate)
 
