@@ -35,6 +35,8 @@
     <%= @product.sku %>
   </li>
 
+  <img src={@product.image_upload} />
+
 </ul>
 
 <span><%= live_patch "Edit", to: Routes.product_show_path(@socket, :edit, @product), class: "button" %></span> |

@@ -24,7 +24,26 @@
     <%= label f, :sku %>
     <%= number_input f, :sku %>
     <%= error_tag f, :sku %>
-  
+
+    <%= live_file_input @uploads.image %>
+    
+    <%= for entry <- @uploads.image.entries do %>
+      <article class="upload-entry">
+
+        <figure>
+          <%# Phoenix.LiveView.Helpers.live_img_preview/2 renders a client-side preview %>
+          <%= live_img_preview entry %>
+          <figcaption><%= entry.client_name %></figcaption>
+        </figure>
+
+        <%# entry.progress will update automatically for in-flight entries %>
+        <progress value={entry.progress} max="100"> <%= entry.progress %>% </progress>
+
+        <%# a regular click event whose handler will invoke Phoenix.LiveView.cancel_upload/3 %>
+        <button phx-click="cancel-upload" phx-value-ref={entry.ref} aria-label="cancel">&times;</button>
+      </article>
+    <% end %>
+
     <div>
       <%= submit "Save", phx_disable_with: "Saving..." %>
     </div>
