@@ -6,7 +6,7 @@ defmodule Pento.SurveyTest do
   describe "demographics" do
     alias Pento.Survey.Demographics
 
-    import Pento.SurveyFixtures
+    import Pento.{SurveyFixtures, AccountsFixtures}
 
     @invalid_attrs %{gender: nil, year_of_birth: nil}
 
@@ -21,11 +21,12 @@ defmodule Pento.SurveyTest do
     end
 
     test "create_demographics/1 with valid data creates a demographics" do
-      valid_attrs = %{gender: "some gender", year_of_birth: 42}
+      user = user_fixture()
+      valid_attrs = %{gender: "male", year_of_birth: 1984, user_id: user.id}
 
       assert {:ok, %Demographics{} = demographics} = Survey.create_demographics(valid_attrs)
-      assert demographics.gender == "some gender"
-      assert demographics.year_of_birth == 42
+      assert demographics.gender == "male"
+      assert demographics.year_of_birth == 1984
     end
 
     test "create_demographics/1 with invalid data returns error changeset" do
@@ -34,13 +35,13 @@ defmodule Pento.SurveyTest do
 
     test "update_demographics/2 with valid data updates the demographics" do
       demographics = demographics_fixture()
-      update_attrs = %{gender: "some updated gender", year_of_birth: 43}
+      update_attrs = %{gender: "female", year_of_birth: 2000}
 
       assert {:ok, %Demographics{} = demographics} =
                Survey.update_demographics(demographics, update_attrs)
 
-      assert demographics.gender == "some updated gender"
-      assert demographics.year_of_birth == 43
+      assert demographics.gender == "female"
+      assert demographics.year_of_birth == 2000
     end
 
     test "update_demographics/2 with invalid data returns error changeset" do
@@ -67,7 +68,7 @@ defmodule Pento.SurveyTest do
   describe "ratings" do
     alias Pento.Survey.Rating
 
-    import Pento.SurveyFixtures
+    import Pento.{SurveyFixtures, AccountsFixtures, CatalogFixtures}
 
     @invalid_attrs %{stars: nil}
 
@@ -82,10 +83,12 @@ defmodule Pento.SurveyTest do
     end
 
     test "create_rating/1 with valid data creates a rating" do
-      valid_attrs = %{stars: 42}
+      user = user_fixture()
+      product = product_fixture()
+      valid_attrs = %{stars: 3, user_id: user.id, product_id: product.id}
 
       assert {:ok, %Rating{} = rating} = Survey.create_rating(valid_attrs)
-      assert rating.stars == 42
+      assert rating.stars == 3
     end
 
     test "create_rating/1 with invalid data returns error changeset" do
@@ -94,10 +97,10 @@ defmodule Pento.SurveyTest do
 
     test "update_rating/2 with valid data updates the rating" do
       rating = rating_fixture()
-      update_attrs = %{stars: 43}
+      update_attrs = %{stars: 4}
 
       assert {:ok, %Rating{} = rating} = Survey.update_rating(rating, update_attrs)
-      assert rating.stars == 43
+      assert rating.stars == 4
     end
 
     test "update_rating/2 with invalid data returns error changeset" do
