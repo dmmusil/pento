@@ -73,6 +73,11 @@ defmodule Pento.Survey do
     |> Repo.update()
   end
 
+  def get_demographic_by_user(user) do
+    Demographics.Query.for_user(user)
+    |> Repo.one()
+  end
+
   @doc """
   Deletes a demographics.
 

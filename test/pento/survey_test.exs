@@ -11,12 +11,12 @@ defmodule Pento.SurveyTest do
     @invalid_attrs %{gender: nil, year_of_birth: nil}
 
     test "list_demographics/0 returns all demographics" do
-      demographics = demographics_fixture()
+      {demographics, _} = demographics_fixture()
       assert Survey.list_demographics() == [demographics]
     end
 
     test "get_demographics!/1 returns the demographics with given id" do
-      demographics = demographics_fixture()
+      {demographics, _} = demographics_fixture()
       assert Survey.get_demographics!(demographics.id) == demographics
     end
 
@@ -34,7 +34,7 @@ defmodule Pento.SurveyTest do
     end
 
     test "update_demographics/2 with valid data updates the demographics" do
-      demographics = demographics_fixture()
+      {demographics, _} = demographics_fixture()
       update_attrs = %{gender: "female", year_of_birth: 2000}
 
       assert {:ok, %Demographics{} = demographics} =
@@ -45,7 +45,7 @@ defmodule Pento.SurveyTest do
     end
 
     test "update_demographics/2 with invalid data returns error changeset" do
-      demographics = demographics_fixture()
+      {demographics, _} = demographics_fixture()
 
       assert {:error, %Ecto.Changeset{}} =
                Survey.update_demographics(demographics, @invalid_attrs)
@@ -54,14 +54,23 @@ defmodule Pento.SurveyTest do
     end
 
     test "delete_demographics/1 deletes the demographics" do
-      demographics = demographics_fixture()
+      {demographics, _} = demographics_fixture()
       assert {:ok, %Demographics{}} = Survey.delete_demographics(demographics)
       assert_raise Ecto.NoResultsError, fn -> Survey.get_demographics!(demographics.id) end
     end
 
     test "change_demographics/1 returns a demographics changeset" do
-      demographics = demographics_fixture()
+      {demographics, _} = demographics_fixture()
       assert %Ecto.Changeset{} = Survey.change_demographics(demographics)
+    end
+
+    test "get_demographics_by_user/1 returns matching demographic" do
+      {demographic, user} = demographics_fixture()
+      IO.inspect(demographic)
+      IO.inspect(user)
+      loaded = Survey.get_demographic_by_user(user)
+      IO.inspect(loaded)
+      assert loaded == demographic
     end
   end
 

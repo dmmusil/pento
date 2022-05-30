@@ -19,7 +19,7 @@ defmodule Pento.SurveyFixtures do
       })
       |> Pento.Survey.create_demographics()
 
-    demographics
+    {demographics, user}
   end
 
   @doc """
