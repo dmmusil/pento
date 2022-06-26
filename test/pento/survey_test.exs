@@ -66,10 +66,7 @@ defmodule Pento.SurveyTest do
 
     test "get_demographics_by_user/1 returns matching demographic" do
       {demographic, user} = demographics_fixture()
-      IO.inspect(demographic)
-      IO.inspect(user)
       loaded = Survey.get_demographic_by_user(user)
-      IO.inspect(loaded)
       assert loaded == demographic
     end
   end
